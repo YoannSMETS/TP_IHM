@@ -239,4 +239,5 @@ classDiagram
 pip install -r requirements.txt
 launch.bat        (sra5 réel)
 launch.bat sim    (simulateur de parole)
+end.bat           (termine l'exécution de tous les agents)
 ```
