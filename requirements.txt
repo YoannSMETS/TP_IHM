@@ -1,0 +1,4 @@
+
+pygame>=2.5.0
+ivy-python>=3.0.0
+numpy

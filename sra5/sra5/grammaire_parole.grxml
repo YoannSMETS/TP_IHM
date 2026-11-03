@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE grammar PUBLIC "-//W3C//DTD GRAMMAR 1.0//EN"
+                "grammar.dtd">
+<!-- the default grammar language is FR  -->
+<grammar  version="1.0"
+          mode ="voice"
+          xmlns="http://www.w3.org/2001/06/grammar"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.w3.org/2001/06/grammar
+                              grammar.xsd"
+          xml:lang="fr-FR" root="Speech_Recognition" tag-format="semantics/1.0">
+
+	<rule id="Speech_Recognition" scope="public">
+		<one-of>
+			<item><ruleref uri="#creation"/><tag>out = rules.creation;</tag></item>
+			<item><ruleref uri="#movement"/><tag>out = rules.movement;</tag></item>
+			<item><ruleref uri="#deletion"/><tag>out = rules.deletion;</tag></item>
+			<item><ruleref uri="#recoloring"/><tag>out = rules.recoloring;</tag></item>
+			<item><ruleref uri="#reference"/><tag>out = rules.reference;</tag></item>
+			<item><ruleref uri="#shape"/><tag>out = "shape=" + rules.shape;</tag></item>
+			<item><ruleref uri="#qualifiers"/><tag>out = rules.qualifiers;</tag></item>
+			<item><one-of><item>annuler</item><item>recommencer</item></one-of><tag>out = "action=cancel";</tag></item>
+		</one-of>
+	</rule>
+	<rule id="creation">
+		<ruleref uri="#create_word"/>
+		<tag>out = "action=create";</tag>
+		<item repeat="0-1"><ruleref uri="#shape"/><tag>out += " shape=" + rules.shape;</tag></item>
+		<item repeat="0-1"><ruleref uri="#qualifiers"/><tag>out += " " + rules.qualifiers;</tag></item>
+	</rule>
+	<rule id="movement">
+		<ruleref uri="#move_word"/>
+		<tag>out = "action=move";</tag>
+		<item repeat="0-1"><ruleref uri="#source"/><tag>out += " " + rules.source;</tag></item>
+		<item repeat="0-1"><ruleref uri="#qualifiers"/><tag>out += " " + rules.qualifiers;</tag></item>
+	</rule>
+	<rule id="reference">
+		<ruleref uri="#source"/><tag>out = rules.source;</tag>
+		<item repeat="0-1"><ruleref uri="#qualifiers"/><tag>out += " " + rules.qualifiers;</tag></item>
+	</rule>
+	<rule id="deletion">
+		<ruleref uri="#delete_word"/>
+		<tag>out = "action=delete";</tag>
+		<item repeat="0-1"><ruleref uri="#source"/><tag>out += " " + rules.source;</tag></item>
+		<item repeat="0-1"><ruleref uri="#color"/><tag>out += " " + rules.color;</tag></item>
+	</rule>
+	<rule id="recoloring">
+		<ruleref uri="#recolor_word"/>
+		<tag>out = "action=recolor";</tag>
+		<item repeat="0-1"><ruleref uri="#source"/><tag>out += " " + rules.source;</tag></item>
+		<item repeat="0-1">
+			<item repeat="0-1">en</item>
+			<ruleref uri="#color"/><tag>out += " " + rules.color;</tag>
+		</item>
+	</rule>
+	<rule id="delete_word">
+		<one-of><item>supprimer</item><item>supprime</item><item>effacer</item><item>efface</item></one-of>
+	</rule>
+	<rule id="recolor_word">
+		<one-of><item>colorier</item><item>colorie</item><item>peindre</item><item>peins</item></one-of>
+	</rule>
+	<rule id="create_word">
+		<one-of>
+			<item>créer</item><item>crée</item><item>dessiner</item><item>dessine</item>
+			<item>tracer</item><item>trace</item>
+		</one-of>
+	</rule>
+	<rule id="move_word">
+		<one-of><item>déplacer</item><item>déplace</item><item>bouger</item><item>bouge</item></one-of>
+	</rule>
+	<rule id="shape">
+		<item repeat="0-1"><one-of><item>un</item><item>le</item></one-of></item>
+		<one-of>
+			<item>rectangle<tag>out = "rectangle";</tag></item>
+			<item>cercle<tag>out = "circle";</tag></item>
+			<item>triangle<tag>out = "triangle";</tag></item>
+			<item>losange<tag>out = "diamond";</tag></item>
+		</one-of>
+	</rule>
+	<rule id="source">
+		<one-of>
+			<item>
+				<one-of><item>cet objet</item><item>cette forme</item><item>ça</item><item>ceci</item></one-of>
+				<tag>out = "select=this";</tag>
+			</item>
+			<item>
+				<item repeat="0-1">ce</item><ruleref uri="#shape"/>
+				<tag>out = "select=this shape=" + rules.shape;</tag>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="qualifiers">
+		<one-of>
+			<item>
+				<ruleref uri="#color"/><tag>out = rules.color;</tag>
+				<item repeat="0-1"><ruleref uri="#location"/><tag>out += " " + rules.location;</tag></item>
+			</item>
+			<item>
+				<ruleref uri="#location"/><tag>out = rules.location;</tag>
+				<item repeat="0-1"><ruleref uri="#color"/><tag>out += " " + rules.color;</tag></item>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="color">
+		<one-of>
+			<item>rouge<tag>out = "color=red";</tag></item>
+			<item><one-of><item>vert</item><item>verte</item></one-of><tag>out = "color=green";</tag></item>
+			<item><one-of><item>bleu</item><item>bleue</item></one-of><tag>out = "color=blue";</tag></item>
+			<item>de cette couleur<tag>out = "color=this";</tag></item>
+		</one-of>
+	</rule>
+	<rule id="location">
+		<one-of><item>ici</item><item>là</item><item>à cet endroit</item></one-of>
+		<tag>out = "position=here";</tag>
+	</rule>
+</grammar>
