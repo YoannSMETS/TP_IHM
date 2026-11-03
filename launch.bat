@@ -5,12 +5,19 @@ setlocal
 cd /d "%~dp0"
 if not defined IVY_BUS set "IVY_BUS=127.255.255.255:2010"
 
-start "ppilot5" /d "%~dp0ppilot5_3.3" ppilot5.exe -b %IVY_BUS% -r ppilot5
-start "Palette" python main.py
-start "Fusion" python fusion.py
+set "PYTHON=python"
+if exist "%~dp0.venv\Scripts\python.exe" set "PYTHON=%~dp0.venv\Scripts\python.exe"
+set "PYTHONUNBUFFERED=1"
+
+echo Starting TP_IHM components in this terminal...
+start "" /b /d "%~dp0ppilot5_3.3" ppilot5.exe -b %IVY_BUS% -r ppilot5
+start "" /b "%PYTHON%" "%~dp0main.py"
+start "" /b "%PYTHON%" "%~dp0fusion.py"
 
 if /i "%~1"=="sim" (
-    start "Simulateur sra5" python speech_simulator.py
+    start "" /b "%PYTHON%" "%~dp0speech_simulator.py"
 ) else (
-    start "sra5" /d "%~dp0sra5\sra5" sra5_on.bat
+    start "" /b /d "%~dp0sra5\sra5" sra5.exe -b %IVY_BUS% -g grammaire_parole.grxml -p on
 )
+
+echo All components started. Run end.bat to stop them.

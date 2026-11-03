@@ -454,7 +454,7 @@ class Whiteboard:
             "Draw = gesture",
             "Gestures: rectangle, cercle,",
             "triangle, losange,",
-            "flèche = déplacer, X = supprimer",
+            "fleche = déplacer, X = supprimer",
         ]
 
         for i, line in enumerate(help_lines):

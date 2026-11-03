@@ -64,7 +64,7 @@ class FusionFrame:
         elif kind == OBJECT:
             self.object_id = self._match(click.objects)
             if self.object_id is None:
-                return f"Je ne trouve pas de {SHAPE_FR.get(self.shape, 'forme')} à cet endroit."
+                return f"Je ne trouve pas de {SHAPE_FR.get(self.shape, 'forme')} a cet endroit."
         self.pending.pop(0)
         return None
 

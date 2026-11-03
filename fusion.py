@@ -14,7 +14,7 @@ from fusion_data import COLOR_FR, SHAPE_FR, SHAPES, Click, FusionFrame
 IVY_BUS = os.environ.get("IVY_BUS", "127.255.255.255:2010")
 TTS_AGENT = os.environ.get("TTS_AGENT", "ppilot5")
 
-CLICK_WINDOW = 5.0       # s: max delay between a click and the speech it completes
+CLICK_WINDOW = 2.0       # s: max delay between a click and the speech it completes
 GLOBAL_TIMEOUT = 10.0     # s: inactivity before abandoning an incomplete command
 DEFAULT_POSITION = (425, 412)  # canvas center of the palette
 DEFAULT_COLOR = "gray"
@@ -186,17 +186,17 @@ class FusionEngine(IvyServer):
             x, y = frame.position or frame.gesture_position or DEFAULT_POSITION
             color = frame.color or DEFAULT_COLOR
             self.send_msg(f"PALETTE_CREATE shape={frame.shape} color={color} x={x} y={y}")
-            self.say(f"{SHAPE_FR[frame.shape]} {COLOR_FR[color]} créé.")
+            self.say(f"{SHAPE_FR[frame.shape]} {COLOR_FR[color]} dessinee.")
         elif frame.action == "move":
             x, y = frame.position
             self.send_msg(f"PALETTE_MOVE id={frame.object_id} x={x} y={y}")
-            self.say("Forme déplacée.")
+            self.say("Forme a ete deplacee.")
         elif frame.action == "delete":
             self.send_msg(f"PALETTE_DELETE id={frame.object_id}")
-            self.say("Forme supprimée.")
+            self.say("Forme supprimee.")
         elif frame.action == "recolor":
             self.send_msg(f"PALETTE_COLOR id={frame.object_id} color={frame.color}")
-            self.say(f"Forme coloriée en {COLOR_FR[frame.color]}.")
+            self.say(f"Forme coloriee en {COLOR_FR[frame.color]}.")
         self.reset()
 
     def abort(self, message):
@@ -212,7 +212,7 @@ class FusionEngine(IvyServer):
 
     def say(self, text):
         print(f"[FUSION] say: {text}")
-        self.send_msg(f"{TTS_AGENT} Say={text}")
+        self.send_msg(f'{TTS_AGENT} Say="{text}"')
 
     def publish_status(self):
         self.send_msg(f"FUSION_STATUS state={self.state} text={self.frame.describe()}")

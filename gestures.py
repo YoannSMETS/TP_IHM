@@ -40,8 +40,6 @@ class GestureRecognizer:
 
     def __init__(self):
         self.r = dN.recognizer()
-        # In dollarN, True means "keep the drawn orientation" (needed to tell rectangle from diamond).
-        # Must be set before adding templates.
         self.r.set_rotation_invariance(True)
         self.r.set_same_nb_strokes(False)
 
